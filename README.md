@@ -134,7 +134,6 @@ Contributions are welcome and encouraged. If you've built something useful with 
 | Resource | Link |
 | --- | --- |
 | Rundeck Documentation | [docs.rundeck.com](https://docs.rundeck.com) |
-| Rundeck MCP Server | [github.com/justynroberts/rundeck-mcp](https://github.com/justynroberts/rundeck-mcp) |
 | PagerDuty Automation | [pagerduty.com/platform/automation](https://www.pagerduty.com/platform/automation/) |
 | Rundeck Plugin Development | [docs.rundeck.com/docs/developer](https://docs.rundeck.com/docs/developer/) |
 | Community Forums | [community.pagerduty.com](https://community.pagerduty.com/) |

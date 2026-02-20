@@ -151,7 +151,7 @@ Contributions are welcome and encouraged. If you've built something useful with 
 ---
 
 <p align="center">
-  <sub>Built with ☕ and YAML by <a href="https://github.com/justynroberts">@justynroberts</a> and contributors</sub>
+
 </p>
 
 <p align="center">

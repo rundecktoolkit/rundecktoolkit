@@ -1,0 +1,38 @@
+plugins {
+  id 'java'
+}
+
+group = 'com.plugin'
+version = '3.0.8'
+
+java {
+  sourceCompatibility = JavaVersion.VERSION_11
+  targetCompatibility = JavaVersion.VERSION_11
+}
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  implementation 'org.rundeck:rundeck-core:5.19.0-20260202'
+  implementation 'com.sun.mail:javax.mail:1.6.2'
+}
+
+jar {
+  archiveBaseName.set('approval-job-step')
+  manifest {
+    attributes(
+      'Rundeck-Plugin-Classnames': 'com.plugin.approvaljobstep.ApprovalJobStep',
+      'Rundeck-Plugin-File-Version': project.version,
+      'Rundeck-Plugin-Version': '2.0',
+      'Rundeck-Plugin-Archive': 'true',
+      'Rundeck-Plugin-Name': 'Approval Job Step',
+      'Rundeck-Plugin-Description': 'Approval workflow step with email links and callback handling',
+      'Rundeck-Plugin-Author': 'Rundeck Community',
+      'Rundeck-Plugin-Rundeck-Compatibility-Version': '5.x',
+      'Rundeck-Plugin-Tags': 'java,WorkflowStep',
+      'Rundeck-Plugin-License': 'MIT'
+    )
+  }
+}

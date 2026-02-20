@@ -54,6 +54,7 @@ rundecktoolkit/
 | Plugin | Description | Type |
 | --- | --- | --- |
 | **AI Job Documenter** | Auto-generates markdown documentation for job definitions using LLMs | Workflow Step |
+| **Approval Job Step** | Email approval gate with escalation, callback links, custom icon, and explicit warning that pending approvals keep execution resources active until approved/denied/timed out | Workflow Step |
 | **Dynamic Options Server** | Converts CSV-based lists to JSON API endpoints for Rundeck option providers | Utility |
 | **FileWatcher** | Cross-platform file system monitor that triggers Rundeck jobs via webhooks | Event Source |
 

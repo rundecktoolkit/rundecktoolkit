@@ -1,47 +1,66 @@
 # Approval Job Step Plugin
 
-Community-maintained Rundeck workflow step plugin for email-based approvals.
+Community-maintained Rundeck workflow step plugin for email-based approvals with escalation and callback links.
 
-## Key Behavior
+## Why use this plugin?
 
-- Sends approval links by email (`approve` / `deny`).
-- Supports optional escalation to a secondary approver.
-- Supports timeout with either:
-  - auto-approve, or
-  - fail step (terminate job execution).
+- Inserts an explicit approval gate in a workflow.
+- Sends email-based `Approve` / `Deny` links to approvers.
+- Supports sequential escalation from primary to secondary approver.
+- Supports timeout behavior:
+  - auto-approve and continue, or
+  - fail step and terminate execution.
+- Includes a custom green check icon in the workflow step picker.
 
-## Important Operational Warning
+## Important operational warning
 
-`WARNING`: every pending approval keeps execution resources active until it is approved, denied, or timed out.
+**WARNING: every pending approval keeps execution resources active until approved, denied, or timed out.**
 
-This means large numbers of pending approvals can exhaust available worker threads/execution capacity.
-Design timeout values and concurrency limits accordingly.
+Pending approvals are not "free waits". At scale, many open approvals can reduce worker/thread capacity and slow other jobs.
 
-## Build
+## Quick start
 
+1. Build:
 ```bash
 ./gradlew clean jar
 ```
 
-Build output:
-
-```text
-build/libs/approval-job-step-3.0.8.jar
+2. Copy JAR:
+```bash
+cp build/libs/approval-job-step-3.0.8.jar $RDECK_BASE/libext/
 ```
 
-## Install
+3. Restart Rundeck or reload plugins.
+4. Add **Approval Job Step** to a workflow and configure SMTP, approvers, and callback URL.
 
-Copy the JAR to your Rundeck `libext` directory and restart/reload plugins.
+## Compatibility
 
-## Plugin Metadata
-
-- Name: `Approval Job Step`
-- Author: `Rundeck Community`
-- Service: `WorkflowStep`
+- Rundeck 5.x (tested in local rebuild environment)
+- Plugin service: `WorkflowStep`
 - Plugin ID: `approval-job-step`
+- Author: `Rundeck Community`
 
-## Notes
+## Documentation
 
-- The callback server binds to the port parsed from `approvalUrlBase`.
-- Use a free local port for callback links to avoid conflicts.
-- Includes a custom green check icon for workflow step picker visibility.
+- [Install and setup guide](./docs/install-and-setup.md)
+- [Configuration reference](./docs/configuration-reference.md)
+- [Operations and capacity guidance](./docs/operations-and-capacity.md)
+- [Troubleshooting](./docs/troubleshooting.md)
+
+## Behavior summary
+
+- Primary approver receives email immediately.
+- If no response and secondary approver is configured, escalation email is sent after `escalationTimeMinutes`.
+- Step polls for callback until timeout or response.
+- Result mapping:
+  - `approved` -> workflow continues.
+  - `denied` -> step fails.
+  - `timeout`:
+    - if `autoApproveOnTimeout=true`: continue as approved.
+    - if `autoApproveOnTimeout=false`: step fails and job execution terminates.
+
+## Security notes
+
+- SMTP password is read from Rundeck Key Storage (`smtpPasswordPath`), not from plaintext step config.
+- Approval callbacks are tokenized (`id` + `token`) and validated server-side.
+- Use HTTPS for `approvalUrlBase` in production.

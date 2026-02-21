@@ -58,6 +58,8 @@ rundecktoolkit/
 | **Dynamic Options Server** | Converts CSV-based lists to JSON API endpoints for Rundeck option providers | Utility |
 | **FileWatcher** | Cross-platform file system monitor that triggers Rundeck jobs via webhooks | Event Source |
 
+Plugin docs: `plugins/approval-job-step-plugin/README.md`
+
 
 ### Example Job Categories
 

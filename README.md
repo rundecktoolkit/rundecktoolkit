@@ -1,10 +1,10 @@
 <p align="center">
   <img src="https://img.shields.io/badge/Rundeck-Toolkit-2C6FBB?style=for-the-badge&logoColor=white" alt="Rundeck Toolkit"/>
   <img src="https://img.shields.io/badge/Status-Active-brightgreen?style=for-the-badge" alt="Status"/>
-  <img src="https://img.shields.io/badge/License-Apache_2.0-blue?style=for-the-badge" alt="License"/>
+  <img src="https://img.shields.io/badge/License-MIT-blue?style=for-the-badge" alt="License"/>
 </p>
 
-<h1 align="center">🔧 Rundeck Toolkit</h1>
+<h1 align="center">Rundeck Toolkit</h1>
 
 <p align="center">
   <strong>Community plugins, example jobs, and automation patterns for Rundeck &amp; PagerDuty Runbook Automation</strong>
@@ -16,7 +16,7 @@
 
 ---
 
-> **⚠️ Disclaimer:** This repository is an independent community project. It is **not officially supported, endorsed, or maintained** by PagerDuty, Inc. or Rundeck, Inc. All content is provided **as-is** under the Apache 2.0 license with no warranty or guarantee of support. Use at your own discretion.
+> **Disclaimer:** This repository is an independent community project. It is **not officially supported, endorsed, or maintained** by PagerDuty, Inc. or Rundeck, Inc. All content is provided **as-is** under the MIT license with no warranty or guarantee of support. Use at your own discretion.
 
 ---
 
@@ -28,130 +28,159 @@ Whether you're just getting started with Rundeck or you're scaling automation ac
 
 ---
 
-## 📦 Repository Structure
+## Available Plugins
 
-```text
-rundecktoolkit/
-├── plugins/              # Custom Rundeck plugins (node executors, notification, workflow steps)
-├── jobs/                 # Exportable job definitions (.yaml/.xml)
-│   ├── infrastructure/   # Server, VM, and cloud management
-│   ├── incident/         # Incident response and remediation
-│   ├── security/         # Compliance checks and patching
-│   ├── monitoring/       # Health checks and diagnostics
-│   └── maintenance/      # Routine operational tasks
-├── patterns/             # Reusable automation design patterns
-├── integrations/         # Examples connecting Rundeck to external systems
-├── acl-templates/        # Access control policy templates
-└── docs/                 # Guides, best practices, and walkthroughs
-```
+### AI & LLM Integrations
 
----
+| Plugin | Description | Version | Links |
+|--------|-------------|---------|-------|
+| **[Anthropic Query](https://github.com/rundecktoolkit/plugin-workflow-anthropic)** | Integrate Claude AI models into workflow steps | v2.0.0 | [Releases](https://github.com/rundecktoolkit/plugin-workflow-anthropic/releases) |
+| **[OpenAI Chat](https://github.com/rundecktoolkit/plugin-workflow-openai)** | Integrate GPT models into workflow steps | v1.0.0 | [Releases](https://github.com/rundecktoolkit/plugin-workflow-openai/releases) |
+| **[Ollama Query](https://github.com/rundecktoolkit/plugin-workflow-ollama)** | Query locally-hosted Ollama models | v2.0.0 | [Releases](https://github.com/rundecktoolkit/plugin-workflow-ollama/releases) |
 
-## 🚀 Highlights
+### Plugin Compatibility
 
-### Plugins
+| Platform | Supported Versions |
+|----------|-------------------|
+| Rundeck Community | 4.x, 5.x |
+| Runbook Automation (Self-Hosted) | 4.x, 5.x |
 
-| Plugin | Description | Type |
-| --- | --- | --- |
-| **AI Job Documenter** | Auto-generates markdown documentation for job definitions using LLMs | Workflow Step |
-| **Dynamic Options Server** | Converts CSV-based lists to JSON API endpoints for Rundeck option providers | Utility |
-| **FileWatcher** | Cross-platform file system monitor that triggers Rundeck jobs via webhooks | Event Source |
+### Prerequisites
 
-
-### Example Job Categories
-
-| Category | What's Included |
-| --- | --- |
-| **Infrastructure** | VM lifecycle management, disk cleanup, certificate rotation, resource scaling |
-| **Incident Response** | Automated diagnostics, log collection, service restarts, runbook execution |
-| **Security & Compliance** | CVE scanning, patch management, firewall rule audits, key rotation |
-| **Monitoring** | Synthetic health checks, endpoint validation, SLA reporting |
-| **Maintenance** | Database housekeeping, log rotation, backup verification, cache clearing |
-
-### Automation Patterns
-
-
+All AI plugins require the **[JQ JSON Log Filter](https://github.com/rundeck-plugins/jq-json-logfilter)** plugin to process JSON output.
 
 ---
 
-## 🔌 Integration Examples
+## Quick Start
 
+### Install a Plugin via UI (Recommended)
 
----
+1. Download the JAR from the plugin's [Releases](https://github.com/rundecktoolkit) page
+2. In Rundeck, navigate to **System Menu → Plugins → Upload Plugin**
+3. Select the downloaded JAR file
+4. The plugin is immediately available—no restart required
 
-## ⚡ Quick Start
+### Import an Example Job
 
-### Import a job definition
+Each plugin includes ready-to-use example jobs in its `examples/` folder.
 
 ```bash
 # Using the Rundeck CLI
-rd jobs load --file jobs/infrastructure/disk-cleanup.yaml \
-  --project MyProject --format yaml
-```
+rd jobs load --file examples/Anthropic_Example.json \
+  --project MyProject --format json
 
-```bash
 # Using the API
 curl -X POST "https://your-rundeck:4440/api/44/project/MyProject/jobs/import" \
   -H "X-Rundeck-Auth-Token: $RD_TOKEN" \
-  -H "Content-Type: application/yaml" \
-  --data-binary @jobs/infrastructure/disk-cleanup.yaml
-```
-
-### Install a plugin
-
-```bash
-# Copy plugin to Rundeck's libext directory
-cp plugins/my-plugin.jar $RDECK_BASE/libext/
-
-# Or for script-based plugins
-cp -r plugins/my-script-plugin $RDECK_BASE/libext/
+  -H "Content-Type: application/json" \
+  --data-binary @examples/Anthropic_Example.json
 ```
 
 ---
 
-## 🤝 Contributing
+## Repository Naming Convention
+
+All plugins follow this naming pattern:
+
+```
+plugin-{type}-{name}
+```
+
+| Component | Description | Examples |
+|-----------|-------------|----------|
+| `plugin` | Required prefix | — |
+| `{type}` | Plugin type | `workflow`, `notification`, `node`, `storage` |
+| `{name}` | Plugin name | `anthropic`, `openai`, `ollama` |
+
+---
+
+## Contributing
 
 Contributions are welcome and encouraged. If you've built something useful with Rundeck, this is a good home for it.
 
-### How to contribute
+### Submission Requirements
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/my-automation`)
-3. Include a README with your contribution explaining what it does and how to use it
-4. Submit a pull request
+Every plugin submission must include:
 
-### Guidelines
+| Requirement | Description |
+|-------------|-------------|
+| **Repository naming** | Follow `plugin-{type}-{name}` convention |
+| **README.md** | Documentation following the standard template |
+| **LICENSE** | MIT license with `Copyright (c) rundecktoolkit` |
+| **Example job** | At least one importable job in `examples/` folder |
+| **Release** | JAR file with proper release notes |
 
-- Job definitions should use YAML format where possible
-- Remove any environment-specific values (API keys, hostnames, internal URLs)
-- Include sample option values or defaults so jobs can be tested without modification
-- Document any external dependencies (plugins, scripts, API access)
+### README Requirements
+
+- Rundeck Community and Runbook Automation badges
+- Compatibility table (minimum Rundeck 4.x)
+- Prerequisites section (including JQ JSON Log Filter if applicable)
+- UI installation as primary method
+- Log filter setup instructions (if plugin outputs JSON)
+- Link to example job(s)
+- Disclaimer and support information
+
+### Example Job Requirements
+
+- Complete, importable Rundeck job definition
+- Demonstrates primary plugin functionality
+- Includes log filter configuration if plugin outputs JSON
+- Uses placeholder paths for keys (e.g., `keys/project/{plugin}/api_key`)
+
+### How to Submit
+
+1. Fork the relevant repository or create a new one following naming conventions
+2. Ensure all requirements are met
+3. Submit a pull request or request to join the organization
+4. Include a description of what the plugin does and why it's useful
 
 ---
 
-## 📖 Related Resources
+## Build Configuration Standards
+
+### build.gradle
+
+```groovy
+jar {
+    manifest {
+        attributes 'Rundeck-Plugin-Author': 'rundecktoolkit'
+        attributes 'Rundeck-Plugin-Rundeck-Compatibility-Version': '4.x'
+        attributes 'Rundeck-Plugin-License': 'MIT'
+        attributes 'Rundeck-Plugin-Source-Link': 'https://github.com/rundecktoolkit/{repo-name}'
+    }
+}
+```
+
+### Release Notes Must Include
+
+- Feature summary
+- Prerequisites (especially JQ JSON Log Filter)
+- Compatibility table
+- Installation instructions (UI method)
+- Basic usage steps including log filter setup
+- Link to README
+- Disclaimer
+
+---
+
+## Related Resources
 
 | Resource | Link |
-| --- | --- |
+|----------|------|
 | Rundeck Documentation | [docs.rundeck.com](https://docs.rundeck.com) |
 | PagerDuty Automation | [pagerduty.com/platform/automation](https://www.pagerduty.com/platform/automation/) |
 | Rundeck Plugin Development | [docs.rundeck.com/docs/developer](https://docs.rundeck.com/docs/developer/) |
+| JQ JSON Log Filter | [github.com/rundeck-plugins/jq-json-logfilter](https://github.com/rundeck-plugins/jq-json-logfilter) |
 | Community Forums | [community.pagerduty.com](https://community.pagerduty.com/) |
 
 ---
 
-## 📊 Project Stats
+## Project Stats
 
-![GitHub stars](https://img.shields.io/github/stars/rundecktoolkit/rundecktoolkit?style=social)
-![GitHub forks](https://img.shields.io/github/forks/rundecktoolkit/rundecktoolkit?style=social)
-![GitHub watchers](https://img.shields.io/github/watchers/rundecktoolkit/rundecktoolkit?style=social)
-![Last commit](https://img.shields.io/github/last-commit/rundecktoolkit/rundecktoolkit)
+![GitHub stars](https://img.shields.io/github/stars/rundecktoolkit?style=social)
+![Last commit](https://img.shields.io/github/last-commit/rundecktoolkit/plugin-workflow-anthropic)
 
 ---
-
-<p align="center">
-
-</p>
 
 <p align="center">
   <sub>Not affiliated with or supported by PagerDuty, Inc. or Rundeck, Inc.</sub>
